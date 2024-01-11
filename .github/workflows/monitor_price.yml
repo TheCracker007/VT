@@ -36,5 +36,3 @@ jobs:
           git config --global user.name "GitHub Action"
           git commit -am "Automated update" || exit 0
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
