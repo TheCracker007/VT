@@ -12,23 +12,27 @@ def get_latest_sell_order():
         
         if sell_orders:
             latest_sell_order = sell_orders[0]
-            order_data = [td.get_text(strip=True) for td in latest_sell_order.find_all('td')]
-            return order_data
-    return None
+            price_vai = latest_sell_order.find('td', class_='price').get_text(strip=True)
+            amount_usdt = latest_sell_order.find('td', class_='amount').get_text(strip=True)
+            return price_vai, amount_usdt
+    return None, None
+
+def update_readme(price_vai, amount_usdt):
+    with open('README.md', 'w') as readme_file:
+        readme_file.write(f"## Latest Sell Order\n\n")
+        readme_file.write(f"**Price (VAI)**: {price_vai}\n")
+        readme_file.write(f"**Amount (USDT)**: {amount_usdt}\n")
 
 def main():
     while True:
-        latest_sell_order = get_latest_sell_order()
+        price_vai, amount_usdt = get_latest_sell_order()
         
-        if latest_sell_order:
+        if price_vai is not None and amount_usdt is not None:
             print("Latest Sell Order:")
-            print(f"Order: {latest_sell_order[0]}")
-            print(f"Side: {latest_sell_order[1]}")
-            print(f"Price (VAI): {latest_sell_order[2]}")
-            print(f"Amount (USDT): {latest_sell_order[3]}")
-            print(f"Total (VAI): {latest_sell_order[4]}")
-            print(f"Sum (VAI): {latest_sell_order[5]}")
-            print("\n")
+            print(f"Price (VAI): {price_vai}")
+            print(f"Amount (USDT): {amount_usdt}\n")
+
+            update_readme(price_vai, amount_usdt)
         
         time.sleep(300)  # Sleep for 5 minutes
 
