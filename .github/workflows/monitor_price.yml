@@ -1,23 +1,40 @@
-name: Monitor Price Change
+name: Binance Monitor
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: "*/5 * * * *"  # Run the script every 5 minutes
 
 jobs:
-  monitor_price:
+  build:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.x
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '16'
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install beautifulsoup4 requests
+          pip install -r requirements.txt
 
-      - name: Run Python script
-        run: python .github/scripts/monitor_price.py
+      - name: Run Binance monitor script
+        run: python monitor_binance.py
+
+      - name: Commit and push if changed
+        run: |
+          git diff
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Action"
+          git commit -am "Automated update" || exit 0
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
