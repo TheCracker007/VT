@@ -14,14 +14,14 @@ binance_url = "https://www.binance.com/en/orderbook/USDT_VAI"
 # Define the IST timezone
 ist = timezone('Asia/Kolkata')
 
-def update_readme(message):
+def update_readme(message, count):
     # Get the current time in IST
     current_time = datetime.now(ist)
     # Format the time as HH:mm AM/PM
     formatted_time = current_time.strftime('%I:%M %p')
 
     with open('README.md', 'a') as f:
-        f.write(f"{formatted_time} - {message}\n")
+        f.write(f"{count}. {formatted_time} - {message}\n")
 
 def monitor_binance_order_book():
     response = requests.get(binance_url)
@@ -31,16 +31,19 @@ def monitor_binance_order_book():
     sell_orders = soup.select('.sellOrderWrapper tbody tr')
 
     price_hit = False
+    count = 1
     for order in sell_orders:
         price = float(order.select_one('.price').text.strip())
         if price <= 1.000:
             notification_message = f"Price Alert! Sell order price reached or went below 1.000 VAI\nPrice: {price}"
-            update_readme(notification_message)
+            update_readme(notification_message, count)
             price_hit = True
+            count += 1
             break  # Stop checking further once the condition is met
 
     if not price_hit:
-        update_readme("Didn't hit the target price in this check.")
+        update_readme("Didn't hit the target price in this check.", count)
+        count += 1
 
 if __name__ == "__main__":
     monitor_binance_order_book()
