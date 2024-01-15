@@ -255,3 +255,4 @@
 1. 11:58 AM - Didn't hit the target price in this check.
 1. 12:08 PM - Didn't hit the target price in this check.
 1. 12:14 PM - Didn't hit the target price in this check.
+1. 12:20 PM - Didn't hit the target price in this check.
