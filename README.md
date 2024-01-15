@@ -230,3 +230,4 @@
 1. 07:52 AM - Didn't hit the target price in this check.
 1. 08:12 AM - Didn't hit the target price in this check.
 1. 08:19 AM - Didn't hit the target price in this check.
+1. 08:25 AM - Didn't hit the target price in this check.
